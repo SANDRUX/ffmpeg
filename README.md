@@ -65,12 +65,12 @@
     მეორე პარამეტრად გადაეცემა ფუნქციას
 
     პაკეტების წაკითხვა ხდება შემდეგი გზით:
-
+```cpp
     while (av_read_frame(pFormatContext, pPacket) >= 0) 
     {
     //...
     }
-
+```
 11) ეხლა ჩვენ უნდა ამოვიღოთ ენკოდირებული(კომპრესირებული) კადრი(frame) და ჩავდოთ AVPacket - ში  
     კოდეკ კონტექსტის მეშვეობით avcodec_send_packet(pCodecContext, pPacket) ფუნქციის გამოყენებით
     სადაც პირველი პარამეტრი არის AVCodecContext სტრუქტურის პოინტერი და მეორე პარამეტრი AVPacket სტრუქტურის პოინტერი სადაც ჩაიდება მთლიანი პაკეტი.
@@ -112,35 +112,35 @@
     AVFormatContext *output_format_context = NULL
 
     გავხსნათ ინპუტ ფაილი:
-
+```cpp
     if ((ret = avformat_open_input(&input_format_context, in_filename, NULL, NULL)) < 0) 
     {
         fprintf(stderr, "Could not open input file '%s'", in_filename);
         goto end;
     }
-
+```
     avformat_open_input(&input_format_context, in_filename, NULL, NULL) ფუნქციით ვხსნით ინპუტ ფაილს 
     და სტრუქტურაში ვწერთ ამ ვიდეოს ჰიდერს მთლიან ინფორმაციას კოდეკებზე სტრიმებზე და ასე შემდეგ.
-
+```cpp
     if ((ret = avformat_find_stream_info(input_format_context, NULL)) < 0)
     {
         fprintf(stderr, "Failed to retrieve input stream information");
         goto end;
     }
-    
+```
     avformat_find_stream_info(input_format_context, NULL) ფუნქციით ვიღებთ სტრიმის ინფორმაციას და ვდებთ იმავე სტრუქტურაში
 
 
     avformat_alloc_output_context2(&output_format_context, NULL, NULL, out_filename) ფუნქციით ვხსნით აუტპუტ ფაილს
     და სტრუქტურას ვქმნით რომელის ალოკაციაც მოხდება და ინიციალიზაცია საჭირო წევრების.
-
+```cpp
     if (!output_format_context) 
     {
         fprintf(stderr, "Could not create output context\n");
         ret = AVERROR_UNKNOWN;
         goto end;
     }    
-
+```
     ამ ნაწილით ვამოწმებთ რამე შეცდომა თუ მოხდა სტრუქტურის ალოკაციის ან ინიციალიზაციის დროს.
 
     number_of_streams = input_format_context->nb_streams; სტრიმების რაოდენობა
@@ -150,7 +150,7 @@
     მაგრამ ამჯერად ჩვენ არ გვჭირდება ამ სამის გარდა სხვა სტრიმი.
 
     ჩვენ ეხლა ყველა აუთ სტრიმი უნდა ჩავდოთ აუტპუტ ვიდეოს კონტექსტ სტრუქტურაში.
-
+```cpp
     for (i = 0; i < input_format_context->nb_streams; i++)
     {
         AVStream *out_stream;
@@ -182,7 +182,7 @@
             goto end;
         }
     }
-
+```
     ამ კოდის ფრაგმენტით ჩვენ შეგვიძლია ჩამოვუაროთ თითოეულ სტრიმს
     ვნახოთ თუ რა ტიპის სტრიმია თუ ჩვენთვის სასურველი სტრიმია მაშინ
     აუტპუტ სტრიმები უნდა ჩავდოთ ჩვენს ვიდეო ფრომატ კონტექსტ სტრუქტურაში
@@ -191,7 +191,7 @@
     რადგან შიგნით სტრიმები ერთნაირად იქნება ენკოდირებული(სტრიმების ფორმატები იგივეა) და მხოლოდ კონტეინერს ვცლით ჩვენ.
 
     ამ კოდის ფრაგმენტით ჩვენ შევქმნით აუტპუტ ფაილს:
-
+```cpp
     if (!(output_format_context->oformat->flags & AVFMT_NOFILE)) 
     {
         ret = avio_open(&output_format_context->pb, out_filename, AVIO_FLAG_WRITE);
@@ -212,7 +212,7 @@
     avio_open(&output_format_context->pb, out_filename, AVIO_FLAG_WRITE) ფუნქციით იქმნება აუტპუტ ფაილი
 
     avformat_write_header(output_format_context, NULL) ფუნქციით იწერება ვიდეოს ჰიდერი
-
+```
     
 
 
